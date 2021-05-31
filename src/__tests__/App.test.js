@@ -16,7 +16,7 @@ test("<App /> la aplicación funciona bien por primera vez", () => {
   expect(screen.getByText(/crear cita/i)).toBeInTheDocument();
 });
 
-test("<App /> show test dynamic", () => {
+test("<App /> Agregar una cita y verificar el heading", () => {
   userEvent.type(screen.getByTestId("pet"), "Hook");
   userEvent.type(screen.getByTestId("propietario"), "Leo");
   userEvent.type(screen.getByTestId("fecha"), "2021-09-10");
@@ -32,4 +32,21 @@ test("<App /> show test dynamic", () => {
   expect(screen.getByTestId("dynamic-title").textContent).toBe(
     "Administra tus Citas"
   );
+});
+
+test("should <App /> Verificar las citas en el DOM", async () => {
+  const citas = await screen.findAllByTestId("cita");
+  expect(citas).toMatchSnapshot();
+  expect(screen.getByTestId("eliminar")).toBeInTheDocument();
+  expect(screen.getByTestId("eliminar").tagName).toBe("BUTTON");
+});
+
+test("should delete appointment", () => {
+  const btnDelete = screen.getByTestId("eliminar");
+  expect(btnDelete).toBeInTheDocument();
+  expect(btnDelete.tagName).toBe("BUTTON");
+
+  userEvent.click(btnDelete);
+  expect(btnDelete).not.toBeInTheDocument();
+  expect(screen.queryByTestId("cita")).not.toBeInTheDocument();
 });
