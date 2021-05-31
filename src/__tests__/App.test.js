@@ -15,3 +15,21 @@ test("<App /> la aplicación funciona bien por primera vez", () => {
   expect(screen.getByText("No hay citas")).toBeInTheDocument();
   expect(screen.getByText(/crear cita/i)).toBeInTheDocument();
 });
+
+test("<App /> show test dynamic", () => {
+  userEvent.type(screen.getByTestId("pet"), "Hook");
+  userEvent.type(screen.getByTestId("propietario"), "Leo");
+  userEvent.type(screen.getByTestId("fecha"), "2021-09-10");
+  userEvent.type(screen.getByTestId("hora"), "08:35");
+  userEvent.type(screen.getByTestId("sintomas"), "Casi no duerme");
+
+  const btnSubmit = screen.getByTestId("btn-submit");
+  userEvent.click(btnSubmit);
+
+  const alert = screen.queryByTestId("alert");
+
+  expect(alert).not.toBeInTheDocument();
+  expect(screen.getByTestId("dynamic-title").textContent).toBe(
+    "Administra tus Citas"
+  );
+});
